@@ -5,7 +5,7 @@ function Bullet:new(x, y, direction)
     local instance = setmetatable({}, Bullet)
     instance.position = {x = x, y = y}
     instance.speed = 300
-    instance.direction = direction -- {x = 0, y = -1} para cima, {x = 0, y = 1} para baixo
+    instance.direction = direction -- {x = 0, y = -1} up, {x = 0, y = 1} down
     instance.width = 4
     instance.height = 12
     return instance

@@ -11,8 +11,8 @@ function GameManager:new(screenWidth, screenHeight)
     local self = setmetatable({}, GameManager)
     self.state = "start"
     self.player = Player:new(screenWidth / 2, screenHeight - 50)
-    self.enemy = Enemy:new(32, 32) -- exemplo de posição inicial
-    self.menuSelected = 1 -- 1 = "Começar", 2 = "Sair"
+    self.enemy = Enemy:new(32, 32) -- init position
+    self.menuSelected = 1 -- 1 = "Start", 2 = "Quit"
     self.hud = Hud:new(screenWidth, screenHeight)
     self.score = 0
 
@@ -49,10 +49,10 @@ function GameManager:keypressed(key)
     end
 end
 
--- Enemy atira (exemplo: atira a cada X segundos, ou aleatório)
+-- Enemy shoot (eg: shoot after X seconds, or random)
 function GameManager:update(dt)
     if self.state == "play" then
-        -- Atualize balas
+        -- update bullets
         for i = #self.playerBullets, 1, -1 do
             local bullet = self.playerBullets[i]
             bullet:update(dt)
@@ -68,12 +68,12 @@ function GameManager:update(dt)
             end
         end
 
-        -- Atualize player, inimigos, etc
+        -- update player, enemies, etc
         self.player:update(dt)
         self.enemy:update(dt)
         self.hud:updateScore(self.score)
 
-        -- Colisões
+        -- collisions
         self:checkCollisions()
     end
 end
@@ -96,19 +96,19 @@ function GameManager:showStartMenu()
     love.graphics.push()
     love.graphics.translate(400, 300)
 
-    -- Anima apenas a opção selecionada
+    -- Animate only selected option
     local scale1 = self.menuSelected == 1 and (1 + 0.1 * math.sin(love.timer.getTime() * 2)) or 1
     local scale2 = self.menuSelected == 2 and (1 + 0.1 * math.sin(love.timer.getTime() * 2)) or 1
 
-    -- "Pressione ENTER para começar"
+    -- "Press Enter to Start"
     love.graphics.push()
     love.graphics.scale(scale1, scale1)
     love.graphics.printf("Pressione ENTER para começar", -400, -50, 800, "center")
     love.graphics.pop()
 
-    -- "Pressione Q para sair"
+    -- "Press Q to Quit"
     love.graphics.push()
-    love.graphics.translate(0, 60) -- Move para baixo para não sobrepor
+    love.graphics.translate(0, 60)
     love.graphics.scale(scale2, scale2)
     love.graphics.printf("Pressione Q para sair", -400, -50, 800, "center")
     love.graphics.pop()
@@ -124,7 +124,7 @@ function GameManager:reset()
     self.state = "play"
     self.player = Player:new()
     self.enemy = Enemy:new(100, 100)
-    -- Reinicialize outros elementos do jogo
+    -- Another components initiations
 end
 
 function GameManager:checkCollisions()
@@ -143,7 +143,6 @@ function GameManager:checkCollisions()
     for i = #self.enemyBullets, 1, -1 do
         local bullet = self.enemyBullets[i]
         if self:checkAABB(bullet, self.player) then
-            -- Colidiu!
             -- self.player.health = self.player.health - 10
             table.remove(self.enemyBullets, i)
         end

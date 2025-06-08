@@ -10,7 +10,7 @@ local Bullet = require("scripts.actors.bullet")
 function Enemy:new(x, y)
     local instance = setmetatable({}, Enemy)
     instance.position = PVector:new(x or 0, y or 0)
-    instance.velocity = PVector:new(60, 0) -- pixels por segundo
+    instance.velocity = PVector:new(60, 0) -- pixels per seconds
     instance.health = 100
     instance.state = "idle"
     instance.direction = 1
@@ -19,7 +19,7 @@ function Enemy:new(x, y)
 
     -- Animação shooting
     instance.shootingFrames = {}
-    local frameWidth, frameHeight = 32, 32 -- ajuste para o tamanho do seu frame
+    local frameWidth, frameHeight = 32, 32
     for i = 0, (shootingImg:getWidth() / frameWidth) - 1 do
         table.insert(instance.shootingFrames, love.graphics.newQuad(i * frameWidth, 0, frameWidth, frameHeight, shootingImg:getDimensions()))
     end
@@ -31,7 +31,7 @@ function Enemy:new(x, y)
 end
 
 function Enemy:update(dt, screenWidth)
-    -- Movimento de um lado para o outro
+    -- Moving left to right
     if self.position.x + self.width >= (screenWidth or love.graphics.getWidth()) then
         self.direction = -1
     elseif self.position.x <= 0 then
@@ -39,7 +39,7 @@ function Enemy:update(dt, screenWidth)
     end
     self.position.x = self.position.x + self.velocity.x * self.direction * dt
 
-    -- Atualiza animação se estiver atirando
+    -- Animate if shooting
     if self.state == "shooting" then
         self.frameTimer = self.frameTimer + dt
         if self.frameTimer >= self.frameDuration then
