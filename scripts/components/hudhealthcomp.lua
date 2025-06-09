@@ -1,38 +1,49 @@
 local HudHealthComp = {}
 HudHealthComp.__index = HudHealthComp
 
-function HudHealthComp:new(x, y)
+function HudHealthComp:new(position)
     local self = setmetatable({}, HudHealthComp)
-    self.x = x
-    self.y = y
+    self.position = position
     self.greenSize = 30
-    self.redSize = 0
-    self.h = 15
-    self.healf = 100
+    self.redSize = 1
+    self.h = 5
+    self.w = 30
+    self.topMargin = 5
+    self.health = 100
     return self
 end
 
 -- HudHealthComp top-center
 function HudHealthComp:draw()
+    -- Outerlines (white)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.rectangle("line", self.position.x, self.position.y - self.h - self.topMargin, self.w, self.h)
 
-    -- Outerlines
+    -- Green bar (life)
     love.graphics.setColor(0, 1, 0)
-    love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+    love.graphics.rectangle("fill", self.position.x, self.position.y - self.h - self.topMargin, self.greenSize, self.h)
 
-    -- Green bar
-    love.graphics.rectangle("fill", self.x, self.y, self.greenSize - 1, self.h - 1)
+    -- Red bar (damage)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle(
+        "fill",
+        self.position.x + self.greenSize,
+        self.position.y - self.h - self.topMargin,
+        self.w - self.greenSize,
+        self.h
+    )
 
-    -- Red bar
-    love.graphics.rectangle("fill", self.x + self.w + 1, self.y, self.redSize - 1, self.h - 1)
+    love.graphics.setColor(1, 1, 1)
 end
 
-function HudHealthComp:update(health)
-    if health <= 0 then
+function HudHealthComp:update(position)
+    if self.health <= 0 then
         -- animate fading
     else
-        self.greenSize = (health / 100) * self.greenSize
-        self.redSize = self.health - (health / 100) * self.greenSize
+        self.greenSize = (self.health / 100) * self.greenSize
+        self.redSize = self.health - (self.health / 100) * self.greenSize
     end
+    self.position = position
 end
 
 return HudHealthComp
