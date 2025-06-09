@@ -17,6 +17,8 @@ end
 function Player:update(dt)
     if love.keyboard.isDown("d") then self:moveLeft() end
     if love.keyboard.isDown("a") then self:moveRight() end
+
+    self.statusbar:update(self.position)
 end
 
 function Player:moveLeft()
