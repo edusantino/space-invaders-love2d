@@ -1,19 +1,34 @@
 local Bullet = {}
 Bullet.__index = Bullet
 
+Anim = require("scripts.extensions.anim")
+local anim = Anim:new()
+
 function Bullet:new(x, y, direction)
-    local instance = setmetatable({}, Bullet)
-    instance.position = {x = x, y = y}
-    instance.speed = 300
-    instance.direction = direction -- {x = 0, y = -1} up, {x = 0, y = 1} down
-    instance.width = 4
-    instance.height = 12
-    return instance
+    local self = setmetatable({}, Bullet)
+    self.position = {x = x, y = y}
+    self.direction = direction -- {x = 0, y = -1} up, {x = 0, y = 1} down
+    self.width = 4
+    self.height = 12
+    
+    -- animation timer
+    self.elapsed = 0
+    self.norm = 0
+    self.duration = 0.5 -- in seconds
+
+    -- animation distance
+    self.from = {x = x, y = y}
+    self.to = - 12  -- height
+    self.is_offscreen = false
+    return self
 end
 
 function Bullet:update(dt)
-    self.position.x = self.position.x + self.direction.x * self.speed * dt
-    self.position.y = self.position.y + self.direction.y * self.speed * dt
+    if self.elapsed < self.duration then
+       self.position.y = anim:lerp(self.from.y, self.to, anim:easeInQuad(self.norm))
+       self.elapsed = self.elapsed + dt
+       self.norm = self.elapsed / self.duration
+    end
 end
 
 function Bullet:draw()
