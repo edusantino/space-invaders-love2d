@@ -8,26 +8,26 @@ local PVector = require("scripts.extensions.pvector")
 local Bullet = require("scripts.actors.bullet")
 
 function Enemy:new(x, y)
-    local instance = setmetatable({}, Enemy)
-    instance.position = PVector:new(x or 0, y or 0)
-    instance.velocity = PVector:new(60, 0) -- pixels per seconds
-    instance.health = 100
-    instance.state = "idle"
-    instance.direction = 1
-    instance.width = idleImg:getWidth()
-    instance.height = idleImg:getHeight()
+    local self = setmetatable({}, Enemy)
+    self.position = PVector:new(x or 0, y or 0)
+    self.velocity = PVector:new(60, 0) -- pixels per seconds
+    self.health = 100
+    self.state = "idle"
+    self.direction = 1
+    self.width = idleImg:getWidth()
+    self.height = idleImg:getHeight()
 
     -- Animação shooting
-    instance.shootingFrames = {}
+    self.shootingFrames = {}
     local frameWidth, frameHeight = 32, 32
     for i = 0, (shootingImg:getWidth() / frameWidth) - 1 do
-        table.insert(instance.shootingFrames, love.graphics.newQuad(i * frameWidth, 0, frameWidth, frameHeight, shootingImg:getDimensions()))
+        table.insert(self.shootingFrames, love.graphics.newQuad(i * frameWidth, 0, frameWidth, frameHeight, shootingImg:getDimensions()))
     end
-    instance.currentFrame = 1
-    instance.frameTimer = 0
-    instance.frameDuration = 0.1 -- segundos por frame
+    self.currentFrame = 1
+    self.frameTimer = 0
+    self.frameDuration = 0.1 -- segundos por frame
 
-    return instance
+    return self
 end
 
 function Enemy:update(dt, screenWidth)
