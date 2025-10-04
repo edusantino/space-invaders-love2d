@@ -6,7 +6,7 @@ Anim.__index = Anim
 function Anim:new()
     return setmetatable({}, Anim) end
 
-function Anim:lerp(a, b, n) return a + (b - a) * n end
+function Anim:lerp(a, b, t) return a + (b - a) * t end
 
 function Anim:easeInQuad(t) return t * t end
 
