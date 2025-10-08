@@ -6,12 +6,12 @@ local Bullet = require("scripts.actors.bullet")
 local HudHealthComp = require("scripts.components.hudhealthcomp")
 
 function Player:new(x, y)
-    local instance = setmetatable({}, Player)
-    instance.position = PVector:new(x or 0, y or 0)
-    instance.speed = PVector:new(10, 0)
-    instance.velocity = PVector:new(0, 0)
-    instance.statusbar = HudHealthComp:new(x, y)
-    return instance
+    local self = setmetatable({}, Player)
+    self.position = PVector:new(x or 0, y or 0)
+    self.speed = PVector:new(10, 0)
+    self.velocity = PVector:new(0, 0)
+    self.statusbar = HudHealthComp:new(x, y)
+    return self
 end
 
 function Player:update(dt)

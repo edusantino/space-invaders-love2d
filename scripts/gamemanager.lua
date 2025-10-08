@@ -136,7 +136,6 @@ function GameManager:checkCollisions()
             self.enemy.health = self.enemy.health - 10
             table.remove(self.playerBullets, i)
             self:updateScore()
-            print("score atualizado!" .. self.score)
         end
     end
     -- Enemy bullets vs Player
